@@ -20,6 +20,7 @@ For creating a Teams Webhook, follow [this guide](https://learn.microsoft.com/en
 | Setting Name  | Description                                                        | Default |
 |---------------|--------------------------------------------------------------------|---------|
 | `webhook_url` | Teams Webhook URL (required)                                       | _none_  |
+| `status`      | Status of the card (`success` or `failure`)                        | _none_  |
 | `facts`       | Comma-separated list of facts to display (project,message,version) | _all_   |
 | `buttons`     | Comma-separated list of buttons (pipeline,commit,release)          | _all_   |
 | `variables`   | Comma-separated list of environment variables to display           | _none_  |

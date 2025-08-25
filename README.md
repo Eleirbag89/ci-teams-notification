@@ -2,6 +2,8 @@
 
 Docker image / CI plugin to send pipeline notifications to Microsoft Teams using Adaptive Cards. Designed to work with Woodpecker CI, but can be used with any CI system that supports Docker images.
 
+You can override the build status to use as workaround for Woodpecker 3 lack of proper pipeline status (see https://github.com/woodpecker-ci/woodpecker/issues/4337 )
+
 ## Features
 
 - Customizable notification card with:
@@ -50,6 +52,7 @@ The plugin uses environment variables:
 ### Plugin Settings
 
 - `webhook_url` (required) - Microsoft Teams webhook URL
+- `status` (optional) - Workaround for Woodpecker 3. Skip the check of `DRONE_BUILD_STATUS`. Valid values are `success` or `failure`
 - `debug` (optional) - Enable debug output of the card JSON
 - `facts` (optional) - Comma-separated list of facts to display:
   - `project` - Repository name

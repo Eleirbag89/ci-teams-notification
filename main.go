@@ -100,6 +100,11 @@ func getAvatarDataURI(avatarURL string) (string, error) {
 
 func createCardBody(projectVersion string) []map[string]any {
 	status := getEnvOrDefault("DRONE_BUILD_STATUS", "")
+	override_status := getEnvOrDefault("PLUGIN_STATUS", "")
+	if override_status != "" {
+		fmt.Printf("Overriding status to: %s\n", override_status)
+		status = override_status
+	}
 	color := "good"
 	title := "✔ Pipeline succeeded"
 	if status == "failure" {
