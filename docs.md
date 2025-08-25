@@ -1,12 +1,12 @@
 ---
 name: Microsoft Teams Notification
-author: mobydeck
-icon: https://raw.githubusercontent.com/mobydeck/ci-teams-notification/refs/heads/main/assets/ms-teams-logo.png
+author: Eleirbag89
+icon: https://raw.githubusercontent.com/Eleirbag89/ci-teams-notification/refs/heads/main/assets/ms-teams-logo.png
 description: Plugin to send pipeline notifications to Microsoft Teams using Adaptive Cards
 tags: [notifications, chat]
-containerImage: mobydeck/ci-teams-notification
-containerImageUrl: https://hub.docker.com/r/mobydeck/ci-teams-notification
-url: https://github.com/mobydeck/ci-teams-notification
+containerImage: eleirbag/ci-teams-notification
+containerImageUrl: https://hub.docker.com/r/eleirbag/ci-teams-notification
+url: https://github.com/Eleirbag89/ci-teams-notification
 ---
 
 # Teams Notification Plugin
@@ -30,12 +30,21 @@ For creating a Teams Webhook, follow [this guide](https://learn.microsoft.com/en
 
 ```yaml
 steps:
-  - name: notify-teams
-    image: mobydeck/ci-teams-notification
+  - name: notify-teams-success
+    image: eleirbag/ci-teams-notification
     settings:
       webhook_url: https://outlook.office.com/webhook/...
+      status: success
     when:
       - status: [success, failure]
+        event: [manual, push, tag]
+  - name: notify-teams-failure
+    image: eleirbag/ci-teams-notification
+    settings:
+      webhook_url: https://outlook.office.com/webhook/...
+      status: failure
+    when:
+      - status: [failure]
         event: [manual, push, tag]
 ```
 
@@ -43,17 +52,31 @@ steps:
 
 ```yaml
 steps:
-  - name: notify-teams
-    image: mobydeck/ci-teams-notification
+  - name: notify-teams-success
+    image: eleirbag/ci-teams-notification
     settings:
       webhook_url:
         from_secret: teams_webhook_url
       facts: project,version
       buttons: pipeline,commit
+      status: success
       variables: MY_VAR1,MY_VAR2
       debug: true
     when:
-      - status: [success, failure]
+      - status: [success]
+        event: [manual, push, tag]
+  - name: notify-teams-failure
+    image: eleirbag/ci-teams-notification
+    settings:
+      webhook_url:
+        from_secret: teams_webhook_url
+      facts: project,version
+      buttons: pipeline,commit
+      status: failure
+      variables: MY_VAR1,MY_VAR2
+      debug: true
+    when:
+      - status: [failure]
         event: [manual, push, tag]
 ```
 

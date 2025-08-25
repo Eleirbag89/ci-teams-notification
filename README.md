@@ -22,12 +22,21 @@ You can override the build status to use as workaround for Woodpecker 3 lack of 
 
 ```yaml
 steps:
-  - name: notify-teams
-    image: mobydeck/ci-teams-notification
+  - name: notify-teams-success
+    image: eleirbag/ci-teams-notification
     settings:
       webhook_url: https://outlook.office.com/webhook/...
+      status: success
     when:
       - status: [success, failure]
+        event: [manual, push, tag]
+  - name: notify-teams-failure
+    image: eleirbag/ci-teams-notification
+    settings:
+      webhook_url: https://outlook.office.com/webhook/...
+      status: failure
+    when:
+      - status: [failure]
         event: [manual, push, tag]
 ```
 
@@ -70,17 +79,31 @@ The plugin uses environment variables:
 
 ```yaml
 steps:
-  - name: notify-teams
-    image: mobydeck/ci-teams-notification
+  - name: notify-teams-success
+    image: eleirbag/ci-teams-notification
     settings:
       webhook_url:
         from_secret: teams_webhook_url
       facts: project,version
       buttons: pipeline,commit
+      status: success
       variables: MY_VAR1,MY_VAR2
       debug: true
     when:
-      - status: [success, failure]
+      - status: [success]
+        event: [manual, push, tag]
+  - name: notify-teams-failure
+    image: eleirbag/ci-teams-notification
+    settings:
+      webhook_url:
+        from_secret: teams_webhook_url
+      facts: project,version
+      buttons: pipeline,commit
+      status: failure
+      variables: MY_VAR1,MY_VAR2
+      debug: true
+    when:
+      - status: [failure]
         event: [manual, push, tag]
 ```
 
@@ -88,4 +111,4 @@ steps:
 
 The plugin is written in Go and uses Microsoft [Teams Adaptive Cards](https://adaptivecards.io/designer/) for rich notifications. It supports customization through environment variables and plugin settings.
 
-Inspired by [woodpecker-teams-notify-plugin](https://github.com/GECO-IT/woodpecker-plugin-teams-notify).
+Crude hack of [ci-teams-notification](https://github.com/mobydeck/ci-teams-notification).
